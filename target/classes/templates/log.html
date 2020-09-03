@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>记录</title>
+</head>
+<body>
+当前操作，查询交易记录，请选择时间段点击查询按钮
+<form action="/doLog" method="get" id="frm">
+    <p>查询日期范围：<input type="text" id="from" name="from" th:value="${from}"/> 到 <input type="text" th:value="${to}" id="to" name="to"> <input type="button" id="chaXun" value="查询"></p>
+    <table border="1">
+        <tr>
+            <td>交易日期</td>
+            <td>支出</td>
+            <td>存入</td>
+            <td>账户余额</td>
+            <td>交易类型</td>
+            <td>备注</td>
+        </tr>
+        <tr  th:each="i:${list}">
+            <td th:text="${i.transactionDate}"></td>
+            <td th:text="${i.expense}"></td>
+            <td th:text="${i.income}"></td>
+            <td th:text="${i.balance}"></td>
+            <td th:text="${i.transactionType}"></td>
+            <td th:text="${i.remark}"></td>
+        </tr>
+        <tr>
+            <td colspan="6"><p><a href="javascript:void (0)" id="shouYe">首页</a> <span id="shangYiYe" th:if="${index != 1}">上一页</span> | <span id="xiaYiYe" th:if="${index < count}">下一页</span> <span id="weiYe">尾页</span> - 第<span th:text="${index}"></span>页/共<span th:text="${count}"></span>页 </p></td>
+        </tr>
+    </table>
+    <input name="index" value="1" id="index" type="hidden" th:value="${index}"/>
+    <input name="count"  id="count" type="hidden" th:value="${count}"/>
+</form>
+
+<script src="/statics/jquery-1.12.4.js"></script>
+<script>
+
+
+    $(function () {
+        $("#shangYiYe").click(function () {
+            $("#index").val(parseInt($("#index").val())-1);
+            $("#chaXun").click();
+        });
+        $("#xiaYiYe").click(function () {
+            $("#index").val(parseInt($("#index").val())+1);
+            $("#chaXun").click();
+        });
+        $("#weiYe").click(function () {
+            $("#index").val($("#count").val());
+            $("#chaXun").click();
+        });
+        $("#shouYe").click(function(){
+            $("#index").val(1);
+            $("#chaXun").click();
+        });
+        $("#chaXun").click(function () {
+            var from = $("#from").val();
+            var to = $("#to").val();
+            if ("" === from) {
+                alert("起始日期不能为空");
+                return null;
+            } else if ("" === to) {
+                alert("截止日期不能为空");
+                return null;
+            }
+            var reg = /^\d{4}-\d{1,2}-\d{1,2}$/;
+            if (!reg.test(from)) {
+                alert("请输入正确的起始日期");
+                return null;
+            } else if (!reg.test(to)) {
+                alert("请输入正确的截止日期");
+                return null;
+            }
+
+            $("#frm").submit();
+        });
+    })
+</script>
+</body>
+</html>

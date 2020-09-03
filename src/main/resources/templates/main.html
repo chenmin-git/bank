@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <style type="text/css">
+        ul,li{
+            list-style: none;
+        }
+        li{
+            margin-bottom: 20px;
+        }
+        ul{
+            display: inline-block;
+        }
+        iframe{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p>卡号：<span th:text="${session.loginSession}"></span><a href="javascript:void(0)" id="exit">退出登录</a></p>
+    <ul>
+        <li><a href="/getBalance" target="targets">查询余额</a> </li>
+        <li><a href="/transfer" target="targets">转账</a> </li>
+        <li><a href="/log" target="targets">查询交易记录</a> </li>
+        <li><a href="/repassword" target="targets">修改密码</a> </li>
+    </ul>
+        <iframe name="targets" src="/hello" width="600px" height="400px">
+
+        </iframe>
+    <div>
+
+    </div>
+</div>
+<script type="text/javascript" src="/statics/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#exit").click(function () {
+            if(confirm("是否退出登录")){
+                location.href="/exit";
+            }
+        });
+    })
+</script>
+</body>
+</html>

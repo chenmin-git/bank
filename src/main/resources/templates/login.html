@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style type="text/css">
+        div {
+            margin: 0 auto;
+            width: 500px;
+            height: 300px;
+            background-color: pink;
+        }
+        p{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h2 th:text="个人网上银行" align="center"></h2>
+    <form action="/doLogin" method="post">
+        <p>卡号：<input type="text" name="cardNo" id="cardNo"/> </p>
+        <p>密码：<input type="password" name="password" id="password"/> </p>
+        <p>卡号：<input type="text" name="kaptcha" size="10" id="kaptcha"/> <img src="/getKaptcha"  id="image"/></p>
+        <p><input type="button" onclick="login()" value="登录网上银行" /></p>
+    </form>
+</div>
+<script src="/statics/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+    function  login() {
+        let carNo = document.getElementById("cardNo");
+        let password = document.getElementById("password");
+        let kaptcha = document.getElementById("kaptcha");
+        var reg =/\d/;
+        if("" === carNo.value){
+            alert("请输入卡号");
+            carNo.blur();
+            return null;
+        }else if(carNo.value.length !== 16){
+            alert("卡号必须为16位")
+            carNo.blur();
+            return null;
+        }
+
+        if(!reg.test(carNo.value)){
+            alert("卡号必须是数字")
+            carNo.blur();
+            return null;
+        }
+
+        if("" === password.value){
+            alert("请输入密码");
+            password.blur();
+            return null;
+        }else if(password.value.length !== 6){
+            alert("密码必须为6位")
+            password.blur();
+            return null;
+        }
+
+        if(!reg.test(password.value)){
+            alert("密码必须为6位数字")
+            password.blur();
+            return null;
+        }
+
+        if("" === kaptcha.value){
+            alert("请输入验证码");
+            kaptcha.blur();
+            return null;
+        }else if(kaptcha.value.length !== 4){
+            alert("验证码必须为4位")
+            kaptcha.blur();
+            return null;
+        }
+        $.post("/doLogin",{"cardNo":carNo.value,"password":password.value,"kaptcha":kaptcha.value},function (res) {
+            if(res.status === 200){
+                location.href="/main"
+            }else{
+                alert(res.msg)
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

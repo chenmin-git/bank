@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>转账</title>
+    <style type="text/css">
+        div{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="zhuan">
+    <h4>当前操作，转账，请输入转入的账号和金额后点击转账按钮</h4>
+    <p>转入账号：<input type="text" id="to"/></p>
+    <p>转入金额：<input type="text" id="money"/></p>
+    <p><input type="button" value="转账" id="submmit"></p>
+</div>
+<script src="/statics/jquery-1.12.4.js"></script>
+<script>
+    $(function () {
+        $("#submmit").click(function(){
+            let to = $("#to").val();
+            let money = $("#money").val();
+            if("" === to){
+                alert("请输入转入卡号");
+                return null;
+            }else if(to.length !== 16){
+                alert("卡号必须为16位")
+                return null;
+            }
+            var reg = /^[0-9]+\.?[0-9]{0,2}$/;
+            if(!reg.test(money)){
+                alert("请输入正确的金额(小数点后只能保留两位)");
+                return null;
+            }
+
+            $.post("/doTransfer",{"to":to,"money":money},function (res) {
+               if(200 === res.status){
+                   $("#zhuan").html("<h1>操作成功，请选择其他业务</h1>");
+               }else{
+                   alert(res.msg);
+               }
+            })
+        })
+    })
+</script>
+</body>
+</html>
